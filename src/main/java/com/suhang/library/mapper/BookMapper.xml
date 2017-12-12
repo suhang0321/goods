@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suhang.library.mapper.BookMapper">
+    <resultMap id="query_book_category_by_bid_map" type="com.suhang.library.po.BookCustom">
+        <id column="bid" property="bid"/>
+        <result column="bname" property="bname"/>
+        <result column="author" property="author"/>
+        <result column="price" property="price"/>
+        <result column="currPrice" property="currPrice"/>
+        <result column="discount" property="discount"/>
+        <result column="press" property="press"/>
+        <result column="publishtime" property="publishtime"/>
+        <result column="edition" property="edition"/>
+        <result column="pageNum" property="pageNum"/>
+        <result column="wordNum" property="wordNum"/>
+        <result column="printtime" property="printtime"/>
+        <result column="booksize" property="booksize"/>
+        <result column="paper" property="paper"/>
+        <result column="cid" property="cid"/>
+        <result column="image_w" property="image_w"/>
+        <result column="image_b" property="image_b"/>
+        <result column="orderBy" property="orderBy"/>
+        <association property="category" javaType="com.suhang.library.po.CategoryCustom">
+            <id column="cid" property="cid"/>
+            <result column="cname" property="cname"/>
+            <result column="pid" property="pid"/>
+            <result column="desc" property="desc"/>
+            <result column="corderBy" property="orderBy"/>
+        </association>
+    </resultMap>
+    <select id="findByCategory" parameterType="com.suhang.library.po.BookVo" resultType="com.suhang.library.po.BookCustom">
+        SELECT * FROM t_book WHERE cid=#{cid} ORDER BY orderby LIMIT #{snep},#{ps}
+    </select>
+    <select id="findCountByCid" parameterType="String" resultType="Integer">
+        SELECT COUNT(*) FROM t_book WHERE cid =#{cid}
+    </select>
+    <select id="findBookByAuthor" parameterType="com.suhang.library.po.BookVo" resultType="com.suhang.library.po.BookCustom">
+        SELECT * FROM t_book WHERE author =#{author} ORDER BY orderby LIMIT #{snep},#{ps}
+    </select>
+    <select id="findCountByAuthor" parameterType="String" resultType="Integer">
+        SELECT COUNT(*) FROM t_book WHERE author =#{author}
+    </select>
+    <select id="findBookByPress" parameterType="com.suhang.library.po.BookVo" resultType="com.suhang.library.po.BookCustom">
+        SELECT * FROM t_book WHERE press= #{press} ORDER BY orderby LIMIT #{snep},#{ps}
+    </select>
+    <select id="findCountByPress" parameterType="String" resultType="Integer">
+        SELECT COUNT(*) FROM t_book WHERE press= #{press}
+    </select>
+    <select id="findBookLikeBname" parameterType="com.suhang.library.po.BookVo" resultType="com.suhang.library.po.BookCustom">
+        SELECT * FROM t_book WHERE bname LIKE '%${bname}%' ORDER BY orderby LIMIT #{snep},#{ps}
+    </select>
+    <select id="findCountLikeBname" parameterType="com.suhang.library.po.BookVo" resultType="Integer">
+        SELECT COUNT(*) FROM t_book WHERE bname LIKE '%${bname}%'
+    </select>
+    <select id="findBookByMulity" parameterType="com.suhang.library.po.BookVo" resultType="com.suhang.library.po.BookCustom">
+        SELECT * FROM t_book WHERE 1=1 AND bname LIKE '%${bname}%' AND author LIKE '%${author}%' AND press LIKE '%${press}%'
+        ORDER BY orderby LIMIT #{snep},#{ps}
+    </select>
+    <select id="findCountByMulity" parameterType="com.suhang.library.po.BookVo" resultType="Integer">
+        SELECT count(*) FROM t_book WHERE 1=1 AND bname LIKE '%${bname}%' AND author LIKE '%${author}%' AND press LIKE '%${press}%'
+    </select>
+    <select id="findBookByBid" parameterType="String" resultMap="query_book_category_by_bid_map">
+      SELECT
+      b.*,c.`cid`,c.`cname`,c.`desc`,c.`orderBy` corderBy,c.`pid`
+       FROM t_book b,t_category c
+        WHERE bid =#{bid} AND b.cid=c.cid
+    </select>
+    <select id="findBookCountByCid" parameterType="String" resultType="Integer">
+        SELECT COUNT(*) FROM t_book WHERE cid = #{cid}
+    </select>
+    <insert id="insertBook" parameterType="com.suhang.library.po.BookCustom">
+        INSERT INTO
+         t_book
+         (bid,bname,author,price,currPrice,discount,press,publishtime,edition,pageNum,wordNum,printtime,booksize,paper,cid,image_w,image_b)VALUES
+(#{bid},#{bname},#{author},#{price},#{currPrice},#{discount},#{press},#{publishtime},#{edition},#{pageNum},#{wordNum},#{printtime},#{booksize},#{paper},#{cid},#{image_w},#{image_b})
+    </insert>
+    <update id="updateBookByBid" parameterType="com.suhang.library.po.BookCustom">
+        UPDATE
+         t_book b
+          SET
+           b.`author`=#{author},b.`bname`=#{bname},b.`booksize`=#{booksize},
+           b.`cid`=#{cid},b.`currPrice`=#{currPrice},
+           b.`discount`=#{discount},b.`edition`=#{edition},b.`pageNum`=#{pageNum},b.`paper`=#{paper},
+           b.`press`=#{press},b.`price`=#{price},b.`printtime`=#{printtime},
+           b.`publishtime`=#{publishtime},b.`wordNum`=#{wordNum}
+           WHERE
+           bid=#{bid}
+    </update>
+    <delete id="deleteBookByBid" parameterType="String">
+        DELETE FROM t_book  WHERE  bid = #{bid}
+    </delete>
+</mapper>

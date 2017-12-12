@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suhang.library.mapper.CartItemMapper">
+    <resultMap id="query_by_cartItemId_Map" type="com.suhang.library.po.CartVo">
+        <id column="cartItemId" property="cartItemId"/>
+        <result column="quantity" property="quantity"/>
+        <result column="bid" property="bid"/>
+        <result column="uid" property="uid"/>
+        <result column="orderBy" property="orderBy"/>
+        <association property="bookCustom" javaType="com.suhang.library.po.BookCustom">
+            <id column="bid" property="bid"/>
+            <result column="bname" property="bname"/>
+            <result column="author" property="author"/>
+            <result column="price" property="price"/>
+            <result column="currPrice" property="currPrice"/>
+            <result column="discount" property="discount"/>
+            <result column="press" property="press"/>
+            <result column="publishtime" property="publishtime"/>
+            <result column="edition" property="edition"/>
+            <result column="pageNum" property="pageNum"/>
+            <result column="wordNum" property="wordNum"/>
+            <result column="printtime" property="printtime"/>
+            <result column="booksize" property="booksize"/>
+            <result column="paper" property="paper"/>
+            <result column="cid" property="cid"/>
+            <result column="image_w" property="image_w"/>
+            <result column="image_b" property="image_b"/>
+            <result column="orderBy" property="orderBy"/>
+        </association>
+
+    </resultMap>
+    <!--<resultMap id="findCartByUidMap" type="com.suhang.library.po.CartItemVo">-->
+        <!--<association property=" bookCustom" javaType="com.suhang.library.po.BookCustom">-->
+            <!--<id column="bid" property="bid"/>-->
+            <!--<result column="bname" property="bname"/>-->
+            <!--<result column="currPrice" property="currPrice"/>-->
+            <!--<result column="image_w" property="image_w"/>-->
+        <!--</association>-->
+        <!--<association property="cartItemCustom" javaType="com.suhang.library.po.CartItemCustom">-->
+            <!--<id column="cartItemId" property="cartItemId"/>-->
+            <!--<result column="quantity" property="quantity"/>-->
+        <!--</association>-->
+    <!--</resultMap>-->
+    <select id="findCartByUid" parameterType="String" resultType="com.suhang.library.po.CartItemVo">
+       SELECT *
+        FROM
+        t_book b,
+        t_cartitem c
+         WHERE
+          b.bid = c.bid
+          AND
+           c.uid = #{uid} ORDER BY c.orderBy
+    </select>
+    <select id="findByUindAndBid" parameterType="Map" resultType="com.suhang.library.po.CartItemVo">
+    SELECT * FROM
+    t_cartitem
+     WHERE
+     uid=#{uid} AND bid =#{bid}
+    </select>
+    <update id="updateQuantityByCartId" parameterType="Map" >
+        UPDATE
+         t_cartitem
+         SET
+          quantity = #{quantity}
+          WHERE
+          cartItemId= #{cartItemId}
+    </update>
+    <insert id="insertCartItem" parameterType="Map">
+        INSERT INTO
+         t_cartitem
+         (cartItemId,quantity,bid,uid)
+         VALUES
+         (#{cartItemId},#{quantity},#{bid},#{uid})
+    </insert>
+    <delete id="deleteCartItemByCartItemId" parameterType="String">
+        DELETE FROM
+        t_cartitem
+        WHERE
+         cartItemId=#{cartItemId}
+    </delete>
+    <select id="findCartItemByCartItemId" parameterType="String" resultMap="query_by_cartItemId_Map">
+        SELECT *
+         FROM
+          t_cartitem c,
+           t_book b
+            WHERE
+             c.bid = b.`bid` AND cartItemId =#{carItemId}
+
+    </select>
+    <select id="findCartItemByCartItemIdType" parameterType="String" resultType="com.suhang.library.po.CartItemVo">
+        SELECT *
+         FROM
+          t_cartitem c, t_book b
+           WHERE c.bid = b.`bid` AND cartItemId =#{cartItemId}
+
+    </select>
+</mapper>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suhang.library.mapper.CategoryMapper">
+    <select id="findCategoryAll" resultType="com.suhang.library.po.CategoryCustom">
+        SELECT * FROM t_category
+    </select>
+    <select id="findFistClassList" resultType="com.suhang.library.po.CategoryCustom">
+        SELECT * FROM t_category WHERE pid IS NULL order by orderBy
+    </select>
+    <select id="findSecondClassList" parameterType="String" resultType="com.suhang.library.po.CategoryCustom">
+        SELECT * FROM t_category WHERE pid = #{cid} order by orderBy
+    </select>
+    <insert id="addFirstClass" parameterType="com.suhang.library.po.CategoryCustom" >
+        INSERT INTO t_category (cid,cname,pid,`desc`) VALUES (#{cid},#{cname},NULL,#{desc})
+    </insert>
+    <insert id="addSecondClass" parameterType="com.suhang.library.po.CategoryCustom">
+        INSERT INTO t_category(cid,cname,pid,`desc`) VALUES(#{cid},#{cname},#{pid},#{desc})
+    </insert>
+    <select id="findClassByCid" parameterType="String" resultType="com.suhang.library.po.CategoryCustom">
+        SELECT * FROM t_category WHERE cid = #{cid}
+    </select>
+    <select id="updateCategoryByCid" parameterType="com.suhang.library.po.CategoryCustom">
+        UPDATE t_category SET t_category.`cname`=#{cname},t_category.`desc`=#{desc}WHERE cid = #{cid}
+    </select>
+    <update id="updateSecondClassByCid" parameterType="com.suhang.library.po.CategoryCustom">
+        UPDATE t_category SET t_category.`cname`=#{cname},t_category.`desc`=#{desc} WHERE cid = #{cid}
+    </update>
+    <select id="findChildCountByParentId" parameterType="String" resultType="Integer">
+        SELECT COUNT(*) FROM t_category WHERE pid = #{cid}
+    </select>
+    <delete id="deleteByCid" parameterType="String">
+        DELETE FROM t_category WHERE cid = #{cid}
+    </delete>
+</mapper>

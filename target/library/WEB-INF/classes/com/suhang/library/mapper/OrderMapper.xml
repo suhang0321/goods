@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suhang.library.mapper.OrderMapper">
+    <select id="findOrderByUid" parameterType="com.suhang.library.po.OrderVo"
+            resultType="com.suhang.library.po.OrderCustom">
+
+        SELECT * FROM t_order WHERE uid =#{uid} ORDER BY ordertime DESC LIMIT #{snep},#{ps}
+
+    </select>
+    <select id="findOrderCountByUid" parameterType="String" resultType="Integer">
+        SELECT COUNT(*) FROM t_order WHERE uid =#{uid}
+    </select>
+    <select id="findOrderItemsByOid" parameterType="String" resultType="com.suhang.library.po.OrderItem">
+        SELECT * FROM t_orderitem WHERE oid = #{oid}
+    </select>
+    <insert id="insertOrder" parameterType="com.suhang.library.po.OrderCustom">
+        INSERT INTO
+        t_order
+         VALUES
+         (#{oid},#{ordertime},#{total},#{status},#{address},#{uid})
+    </insert>
+    <insert id="insertOrderItem" parameterType="com.suhang.library.po.OrderItem">
+        INSERT INTO
+         t_orderitem
+          VALUES
+          (#{orderItemId},#{quantity},#{subtotal},#{bid},#{bname},#{currPrice},#{image_b},#{oid})
+
+    </insert>
+    <select id="findOrderByOid" parameterType="String" resultType="com.suhang.library.po.OrderCustom">
+        SELECT * FROM t_order WHERE oid = #{oid}
+    </select>
+    <update id="updateStatusByOid" parameterType="com.suhang.library.po.OrderCustom">
+        UPDATE t_order SET STATUS=#{status} WHERE oid = #{oid}
+    </update>
+    <select id="findAll" parameterType="com.suhang.library.po.OrderVo"
+            resultType="com.suhang.library.po.OrderCustom">
+        SELECT * FROM t_order ORDER BY ordertime DESC LIMIT #{snep},#{ps}
+    </select>
+    <select id="findAllOrderCount" resultType="Integer">
+        SELECT COUNT(*) FROM t_order
+    </select>
+    <select id="findOrderByStatus" parameterType="com.suhang.library.po.OrderVo"
+            resultType="com.suhang.library.po.OrderCustom">
+        SELECT * FROM t_order WHERE STATUS = #{status} ORDER BY ordertime DESC LIMIT #{snep},#{ps}
+    </select>
+    <select id="findCountByStatus" parameterType="Integer" resultType="Integer">
+        SELECT COUNT(*) FROM t_order WHERE STATUS = #{status}
+    </select>
+
+</mapper>

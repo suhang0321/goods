@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suhang.library.mapper.UserMapper">
+    <select id="findUserByUid" parameterType="String" resultType="com.suhang.library.po.UserCustom">
+        SELECT * FROM t_user WHERE uid = #{uid}
+    </select>
+    <insert id="insertUser" parameterType="com.suhang.library.po.UserCustom">
+          INSERT INTO t_user ()VALUES(#{uid},#{loginname},#{loginpass},#{email},#{status},#{activationCode})
+    </insert>
+    <select id="queryCountByLoginname" parameterType="String" resultType="int">
+        SELECT COUNT(1) FROM t_user WHERE loginname = #{loginname}
+    </select>
+    <select id="queryCountByEmail" parameterType="String" resultType="int">
+        SELECT COUNT(1) FROM t_user WHERE email =#{email}
+    </select>
+    <select id="findUserByCode" parameterType="String" resultType="com.suhang.library.po.UserCustom">
+        SELECT * FROM t_user WHERE activationCode = #{activationCode}
+    </select>
+    <update id="updateStatusByid" parameterType="Map">
+        UPDATE t_user SET t_user.`status`=#{status} WHERE uid =#{uid}
+    </update>
+    <select id="findByNameAndPass" parameterType="Map" resultType="com.suhang.library.po.UserCustom">
+        SELECT * FROM t_user WHERE loginname=#{loginname} AND loginpass =#{loginpass}
+    </select>
+    <select id="findByUidAndPass" parameterType="Map" resultType="Integer">
+        SELECT COUNT(*) FROM t_user WHERE uid=#{uid} AND loginpass =#{loginpass}
+    </select>
+    <update id="updatePassByUid" parameterType="Map" >
+        UPDATE t_user SET loginpass =#{newloginpass} WHERE uid=#{uid}
+    </update>
+</mapper>
